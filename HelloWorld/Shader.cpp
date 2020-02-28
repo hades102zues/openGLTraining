@@ -33,6 +33,7 @@ void Shader::addShader(GLuint& shaderProgram, GLenum shaderType, const char* sha
 		char err[1024] = { 0 };
 		glGetShaderInfoLog(shaderObject, sizeof(err), NULL, err);
 		printf("Error compiling shader: %s", err);
+		return;
 	}
 
 	glAttachShader(shaderProgram, shaderObject);
@@ -56,6 +57,7 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 		char err[1024] = { 0 };
 		glGetProgramInfoLog(shaderId, sizeof(err), NULL, err);
 		printf(" Error Linking Program. Error: %s", err );
+		return;
 	}
 
 	GLint validateStatusCode;
@@ -65,6 +67,7 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 		char err[1024] = { 0 };
 		glGetProgramInfoLog(shaderId, sizeof(err), NULL, err);
 		printf("Error Validating Program. Error: %s", err);
+		return;
 	}
 
 	uniformModel = glGetUniformLocation(shaderId, "uniformModel");
@@ -72,6 +75,31 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 
 }
 
-Shader::~Shader() {
+GLuint Shader::getProjectionLocation() {
+	return uniformProjection;
+}
+GLuint Shader::getModelLocation() {
+	return uniformModel;
+}
 
+void Shader::useShader() {
+	glUseProgram(shaderId);
+}
+
+void Shader::clearShader() {
+	
+	if (shaderId != 0) {
+		glDeleteProgram(shaderId);
+		shaderId = 0;
+	 }
+
+	uniformModel = 0;
+	uniformProjection = 0;
+
+}
+
+
+
+Shader::~Shader() {
+	clearShader();
 }
