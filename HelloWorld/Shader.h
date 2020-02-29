@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <fstream>
 
@@ -18,6 +18,9 @@ public:
 	Shader();
 
 	void createFromString( const char* vshaderStruct, const char* fshaderStruct);
+	void createFromLocation(const char* vshaderStructPath, const char* fshaderStructPath);
+
+	std::string readFile(const char* fileLocation);
 
 	GLuint getProjectionLocation();
 	GLuint getModelLocation();

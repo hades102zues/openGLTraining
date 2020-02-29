@@ -13,6 +13,16 @@ void Shader::createFromString(const char* vshaderStruct, const char* fshaderStru
 
 	compileShader(vshaderStruct, fshaderStruct);
 }
+void Shader::createFromLocation(const char* vshaderStructPath, const char* fshaderStructPath) {
+	std::string vShaderStruct = readFile(vshaderStructPath);
+	std::string fShaderStruct = readFile(fshaderStructPath);
+
+	const char* vertexCode = vShaderStruct.c_str();
+	const char* fragmentCode = fShaderStruct.c_str();
+
+	compileShader(vertexCode, fragmentCode);
+}
+
 
 void Shader::addShader(GLuint& shaderProgram, GLenum shaderType, const char* shaderStruct) {
 
@@ -54,24 +64,51 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 	glLinkProgram(shaderId);
 	glGetProgramiv(shaderId, GL_LINK_STATUS, &linkStatusCode);
 	if (!linkStatusCode) {
-		char err[1024] = { 0 };
+		GLchar err[1024] = { 0 };
 		glGetProgramInfoLog(shaderId, sizeof(err), NULL, err);
 		printf(" Error Linking Program. Error: %s", err );
 		return;
 	}
 
 	GLint validateStatusCode;
+	glValidateProgram(shaderId);
 	glGetProgramiv(shaderId, GL_VALIDATE_STATUS, &validateStatusCode);
+	printf("valid: %d", validateStatusCode);
 	if (!validateStatusCode) {
 
-		char err[1024] = { 0 };
+		GLchar err[1024] = { 0 };
 		glGetProgramInfoLog(shaderId, sizeof(err), NULL, err);
 		printf("Error Validating Program. Error: %s", err);
 		return;
 	}
 
-	uniformModel = glGetUniformLocation(shaderId, "uniformModel");
-	uniformProjection = glGetUniformLocation(shaderId, "uniformProjection");
+	uniformModel = glGetUniformLocation(shaderId, "model");
+	uniformProjection = glGetUniformLocation(shaderId, "projection");
+
+}
+
+std::string Shader::readFile( const char* fileLocation) {
+
+	std::string content;
+
+	std::ifstream filestream(fileLocation, std::ios::in);
+
+	if (!filestream.is_open()) {
+		printf("Error retrieving shader structures from file \n");
+		return "";
+	}
+
+	std::string line;
+	while (!filestream.eof()) {
+
+		std::getline(filestream, line);
+		content.append(line + "\n"); //if u don't put that newline then glsl will explode
+
+
+	}
+
+	filestream.close();
+	return content;
 
 }
 
