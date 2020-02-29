@@ -15,8 +15,9 @@
 #include <glm/gtc/type_ptr.hpp> //convert our glm matrix to something useable in the shader
 
 
-#include  "Mesh.h"
-#include "Shader.h"
+#include  "Mesh.h" //system that handles the data for object construction
+#include "Shader.h" //program for compiling the shaders
+#include "Wind.h" //our system window
 
 
 
@@ -59,83 +60,32 @@ void createShaders(std::vector<Shader*> &list) {
 
 int main(void) {
 
-	const GLint width = 1028, height = 768; //for the window
+	Wind* programWindow = new Wind(800, 600); 
+	programWindow->initialIze();
 	
 	std::vector<Mesh*> meshList;
 	std::vector<Shader*> shaderList;
+
 	//shader variables 
 	GLuint uniformModel=0, uniformProjection=0;
 
-
-	
 
 	 float toRadians = 3.14159265f  / 180.0f ;
 	 float currentAngle = 0.0f;
 
 	 float maxOffset = 0.7f, triOffset = 0.0f, triIncrement = 0.0005f;
 	 bool direction = true;
-	
-	
-
-	/************glfw**************/
-
-	if (!glfwInit()) {
-		std::cout << "GLFW Initialization Failed";
-		glfwTerminate();
-		return -1;
-	}
-	 //set some window properties
-	 
-	 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); //opengl version support 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); //opengl version support 
-	
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //core profile = no backwards compat.
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); //forwards compatibility ;)
-
-
-	GLFWwindow* window = glfwCreateWindow(width, height, "Fengine", NULL, NULL);
-	if (!window) {
-		std::cout << "Window Creation Failed";
-		glfwDestroyWindow(window);
-		glfwTerminate();
-		return -1;
-	}
-
-	//grab some buffer info
-	int bufferWidth, bufferHeight;
-	glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
-
-	//tell glew what is the current window it will be drawing to (aka set context)
-	glfwMakeContextCurrent(window);
-
-	/***GLEW***/
-	glewExperimental= GL_TRUE; //enables extensions. Always set this.
-
-	if (glewInit() != GLEW_OK) {
-		glfwDestroyWindow(window);
-		glfwTerminate();
-		std::cout << "Glew Init Failed";
-		return -1;
-	}
-
-	//tie opengl to the buffers
-	glViewport(0, 0, bufferWidth, bufferHeight);
-
-
 
 	
 	createObjects(meshList);
 	createShaders(shaderList);
 
 
-	glEnable(GL_DEPTH_TEST);
-
 	uniformProjection = shaderList[0]->getProjectionLocation();
-	glm::mat4 matprojection = glm::perspective(45.0f, (GLfloat)bufferWidth / (GLfloat) bufferHeight, 0.1f, 100.0f);
+	glm::mat4 matprojection = glm::perspective(45.0f, programWindow->getBufferWidth() / programWindow->getBufferHeight(), 0.1f, 100.0f);
 
 	//main loop
-	while (!glfwWindowShouldClose(window)) {
+	while (!programWindow->shouldWIndowClose()) {
 		//Get + Handle user inputs
 		glfwPollEvents();
 
@@ -173,18 +123,17 @@ int main(void) {
 		meshList[0]->renderMesh();
 		
 
-		glBindVertexArray(0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glUseProgram(0);
 		/*_drawphase*/
 
 
-		glfwSwapBuffers(window);
+		programWindow->swapBuffers(); //glfwSwapBuffers(window);
 	}
 
-	glfwDestroyWindow(window);
-	glfwTerminate();
+	programWindow->~Wind();
+	//glfwDestroyWindow(window);
+	//glfwTerminate();
 	
-	std::cout << "Hello World";
+
 	return 0;
 }

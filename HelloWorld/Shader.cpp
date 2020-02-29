@@ -123,6 +123,8 @@ void Shader::useShader() {
 	glUseProgram(shaderId);
 }
 
+
+
 void Shader::clearShader() {
 	
 	if (shaderId != 0) {
