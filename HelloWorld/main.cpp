@@ -16,44 +16,22 @@
 
 
 #include  "Mesh.h"
+#include "Shader.h"
 
-//shader variables 
-GLuint uniformModel, uniformProjection;
 
-//vertex shader decl.
-static const char* vShaderStruct= "												\n\
-#version 330																				\n\
-																									\n\
-out vec4 vColor;																			\n\
-																									\n\
-layout (location=0)   in vec3 pos;													\n\
-uniform mat4 model	;																	\n\
-uniform mat4 projection;																\n\
-																									\n\
-void main() {																					\n\
-     gl_Position =  projection * model* vec4(pos, 1.0);					\n\
-	 vColor = vec4(clamp(pos, 0.0f, 1.0f),1.0f);								\n\
-}";
 
-//fragment shader decl.
-static const char* fShaderStruct= "												\n\
-#version 330																				\n\
-																									\n\
-in vec4  vColor; 																			\n\
-																									\n\
-out vec4 color;																				\n\
-																									\n\
-void main () {																				\n\
-    color = vColor;																			\n\
-}";
+static const char* fShaderStruct = "../ShaderStructs/shader.fragment.txt";
+static const char* vShaderStruct = "../ShaderStructs/shader.vertex.txt";
 
-void createTriangle(std::vector<Mesh*> &list) {
+
+void createObjects(std::vector<Mesh*> &list) {
 
     unsigned int indices[] = {
 			0, 3, 1,
 		    1, 3, 2,
 		    2, 3, 0,
-		    0, 1, 2
+		    0, 1, 2,
+
 	};
 
 	GLfloat vertices[]= {
@@ -68,84 +46,26 @@ void createTriangle(std::vector<Mesh*> &list) {
 	list.push_back(obj1);
 	
 }
+//
 
-void addShaders(GLuint &shaderProgram, GLenum shaderType, const char* shaderStruct) {
+void createShaders(std::vector<Shader*> &list) {
 
-	GLuint theShader = glCreateShader(shaderType); //create an empty shader object
-	
-	const GLchar* code[1] ;
-	code[0] = shaderStruct;
+	Shader* shader1 = new Shader();
+	shader1->createFromLocation(vShaderStruct, fShaderStruct);
 
-	GLint length[1]; 
-	length[0] = strlen(shaderStruct);
-
-
-	//(shader, number of incoming shaderStructures, .,.)
-	glShaderSource(theShader, 1, code, length);
-	glCompileShader(theShader);
-
-	GLint compileStatus;
-	glGetShaderiv(shaderProgram, GL_COMPILE_STATUS, &compileStatus);
-	if (!compileStatus) {
-		GLchar err[1024] = { 0 };
-		glGetShaderInfoLog(theShader, sizeof(err), NULL, err);
-		printf(" shader error %s", err);
-		return;
-	}
-
-	glAttachShader(shaderProgram, theShader);
-	
-
-}
-
-
-void initiateShaderEngine(GLuint &shaderProgram) {
-
-	 shaderProgram =  glCreateProgram(); //create the shader program
-
-	if (!shaderProgram) {
-		std::cout << "Shader Program Creation Failed";
-		return;
-	}
-
-	addShaders(shaderProgram, GL_VERTEX_SHADER, vShaderStruct);
-	addShaders(shaderProgram, GL_FRAGMENT_SHADER, fShaderStruct);
-	
-	GLint linkStatus, validationStatus;
-
-	/**creates the executables on the graphics card**/
-	glLinkProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linkStatus);
-	if (!linkStatus) {
-		GLchar err[1024] = { 0 };
-		glGetProgramInfoLog(shaderProgram, sizeof(err), NULL, err);
-			printf("Linking error: %s", err);
-	}
-
-	/*check that the shader are valid for the current context version*/
-	glValidateProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &validationStatus);
-	if (!validationStatus) {
-		GLchar err[1024] = { 0 };
-		glGetProgramInfoLog(shaderProgram, sizeof(err), NULL, err);
-		printf("Linking error: %s", err);
-	}
-
-	
-	uniformModel = glGetUniformLocation(shaderProgram, "model");
-	uniformProjection = glGetUniformLocation(shaderProgram, "projection");
-
-
-	
+	list.push_back(shader1);
 }
 
 
 int main(void) {
 
 	const GLint width = 1028, height = 768; //for the window
-	GLuint shader;
-	 
+	
 	std::vector<Mesh*> meshList;
+	std::vector<Shader*> shaderList;
+	//shader variables 
+	GLuint uniformModel=0, uniformProjection=0;
+
 
 	
 
@@ -204,12 +124,14 @@ int main(void) {
 
 
 
-	/**triangle**/
-	createTriangle(meshList);
-	initiateShaderEngine(shader);
+	
+	createObjects(meshList);
+	createShaders(shaderList);
+
 
 	glEnable(GL_DEPTH_TEST);
 
+	uniformProjection = shaderList[0]->getProjectionLocation();
 	glm::mat4 matprojection = glm::perspective(45.0f, (GLfloat)bufferWidth / (GLfloat) bufferHeight, 0.1f, 100.0f);
 
 	//main loop
@@ -237,9 +159,9 @@ int main(void) {
 
 		/*draw phase**/
 
-		glUseProgram(shader); //we actually spoil up the execute shader programs we put on the graphics card
+		shaderList[0]->useShader(); //we actually spoil up the execute shader programs we put on the graphics card
 
-	
+		uniformModel = shaderList[0]->getModelLocation();
 		glm::mat4 model = glm::mat4(1.0);
 		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));
 		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -247,7 +169,7 @@ int main(void) {
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(matprojection));
 
-	
+	   
 		meshList[0]->renderMesh();
 		
 
