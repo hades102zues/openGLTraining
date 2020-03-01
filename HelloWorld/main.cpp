@@ -63,8 +63,8 @@ int main(void) {
 	Wind* programWindow = new Wind(800, 600); 
 	programWindow->initialIze();
 	
-	std::vector<Mesh*> meshList;
-	std::vector<Shader*> shaderList;
+	std::vector<Mesh*> meshList; //idea here is that you have an array that keeps track of all the objects you will create
+	std::vector<Shader*> shaderList; //idea here is that you an array that keeps track of  all the shader Programs you will create
 
 	//shader variables 
 	GLuint uniformModel=0, uniformProjection=0;

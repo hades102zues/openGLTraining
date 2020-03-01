@@ -5,6 +5,8 @@ Wind::Wind() {
 
 	width = 800;
 	height = 600;
+	bufferWidth = bufferHeight = 0;
+	mainWindow = nullptr;
 
 }
 
@@ -12,6 +14,8 @@ Wind::Wind(GLint windowWidth, GLint windowHeight) {
 
    width = windowWidth;
    height = windowHeight;
+   mainWindow = nullptr;
+   bufferWidth = bufferHeight = 0;
 
 }
 
