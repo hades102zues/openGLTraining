@@ -7,7 +7,11 @@ Wind::Wind() {
 	height = 600;
 	bufferWidth = bufferHeight = 0;
 	mainWindow = nullptr;
-
+	
+	for (int i = 0; i < 1024; i++) {
+		keyPool[i] = 0;
+	}
+	
 }
 
 Wind::Wind(GLint windowWidth, GLint windowHeight) {
@@ -16,6 +20,10 @@ Wind::Wind(GLint windowWidth, GLint windowHeight) {
    height = windowHeight;
    mainWindow = nullptr;
    bufferWidth = bufferHeight = 0;
+
+   for (int i = 0; i < 1024; i++) {
+	   keyPool[i] = 0;
+   }
 
 }
 
@@ -58,6 +66,11 @@ int Wind::initialIze() {
 	glEnable(GL_DEPTH_TEST);
 
 
+}
+
+void Wind::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+
+	printf("Callback Triggered!!");
 }
 
 bool Wind::shouldWIndowClose() {
