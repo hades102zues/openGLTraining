@@ -63,6 +63,7 @@ int Wind::initialIze() {
 	}
 
 	glViewport(0, 0, bufferWidth, bufferHeight);
+	glfwSetKeyCallback(mainWindow, key_callback);
 	glEnable(GL_DEPTH_TEST);
 
 
@@ -70,7 +71,12 @@ int Wind::initialIze() {
 
 void Wind::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
-	printf("Callback Triggered!!");
+	if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+
+	
+
+
 }
 
 bool Wind::shouldWIndowClose() {
