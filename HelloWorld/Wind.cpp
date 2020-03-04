@@ -63,18 +63,49 @@ int Wind::initialIze() {
 	}
 
 	glViewport(0, 0, bufferWidth, bufferHeight);
-	glfwSetKeyCallback(mainWindow, key_callback);
 	glEnable(GL_DEPTH_TEST);
+
+
+	//storing the context of the Wind class within in the window for extraction in the key_callback
+	glfwSetWindowUserPointer(mainWindow, this);
+	//set the key event listener
+	glfwSetKeyCallback(mainWindow, key_callback);
+	
 
 
 }
 
 void Wind::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
-	if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE)
-		glfwSetWindowShouldClose(window, GL_TRUE);
+	//*A Quick Unrelated Lesson*
+	//Functions descend from the C language. Classes descend from C++ having both an address and a instance/context given by the this pointer
+	//C functions only receives the address of the object with no included binding to the specific instance of the object. 
+	//We need the context in order to perform window->anything or the compiler will SCREAM !
+	//long story short, this C function is not fit enough to handle C++ structure in an intuitive way like we'd expect from something like javascript.
+   
 
-	
+	//going from a void* pointer* to a Wind*
+	Wind* localWind = static_cast<Wind*> (glfwGetWindowUserPointer(window));
+	                                                               
+
+	if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE) {
+
+		glfwSetWindowShouldClose(window, GL_TRUE);
+		return;
+	}
+		
+	if (key >= 0 && key <1024 ) {
+
+		if (action == GLFW_PRESS) {
+			localWind->keyPool[key] = true;
+		}
+
+		else if (action == GLFW_RELEASE) {
+			localWind->keyPool[key] = false;
+		}
+
+	}
+	    
 
 
 }
