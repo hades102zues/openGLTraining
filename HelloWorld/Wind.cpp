@@ -51,6 +51,8 @@ int Wind::initialIze() {
 
 	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
 	glfwMakeContextCurrent(mainWindow);
+	//set the window event listeners
+	createCallbacks();
 
 	glewExperimental= GL_TRUE;
 
@@ -68,10 +70,14 @@ int Wind::initialIze() {
 
 	//storing the context of the Wind class within in the window for extraction in the key_callback
 	glfwSetWindowUserPointer(mainWindow, this);
-	//set the key event listener
-	glfwSetKeyCallback(mainWindow, key_callback);
+	
 	
 
+}
+
+void Wind::createCallbacks() {
+
+	glfwSetKeyCallback(mainWindow, key_callback);
 
 }
 
@@ -91,17 +97,19 @@ void Wind::key_callback(GLFWwindow* window, int key, int scancode, int action, i
 	if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE) {
 
 		glfwSetWindowShouldClose(window, GL_TRUE);
-		return;
+		
 	}
 		
 	if (key >= 0 && key <1024 ) {
 
 		if (action == GLFW_PRESS) {
 			localWind->keyPool[key] = true;
+			printf("key pressed: %d \n", key);
 		}
 
 		else if (action == GLFW_RELEASE) {
 			localWind->keyPool[key] = false;
+			printf("key released: %d \n", key);
 		}
 
 	}
