@@ -73,7 +73,7 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 	GLint validateStatusCode;
 	glValidateProgram(shaderId);
 	glGetProgramiv(shaderId, GL_VALIDATE_STATUS, &validateStatusCode);
-	printf("valid: %d", validateStatusCode);
+	
 	if (!validateStatusCode) {
 
 		GLchar err[1024] = { 0 };
