@@ -7,6 +7,7 @@ Wind::Wind() {
 	height = 600;
 	bufferWidth = bufferHeight = 0;
 	mainWindow = nullptr;
+	mouseFirstMove = true;
 	
 	for (int i = 0; i < 1024; i++) {
 		keyPool[i] = 0;
@@ -20,6 +21,7 @@ Wind::Wind(GLint windowWidth, GLint windowHeight) {
    height = windowHeight;
    mainWindow = nullptr;
    bufferWidth = bufferHeight = 0;
+   mouseFirstMove = true;
 
    for (int i = 0; i < 1024; i++) {
 	   keyPool[i] = 0;
@@ -51,6 +53,7 @@ int Wind::initialIze() {
 
 	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
 	glfwMakeContextCurrent(mainWindow);
+
 	//set the window event listeners
 	createCallbacks();
 
@@ -70,7 +73,7 @@ int Wind::initialIze() {
 
 	//storing the context of the Wind class within in the window for extraction in the key_callback
 	glfwSetWindowUserPointer(mainWindow, this);
-	
+	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	
 
 }
@@ -78,6 +81,7 @@ int Wind::initialIze() {
 void Wind::createCallbacks() {
 
 	glfwSetKeyCallback(mainWindow, key_callback);
+	glfwSetCursorPosCallback(mainWindow, mouse_callback);
 
 }
 
@@ -115,6 +119,32 @@ void Wind::key_callback(GLFWwindow* window, int key, int scancode, int action, i
 	}
 	    
 
+
+}
+
+void Wind::mouse_callback(GLFWwindow* window, double xPos, double yPos) {
+
+	Wind* localWind = static_cast<Wind*> (glfwGetWindowUserPointer(window));
+
+	if (localWind->mouseFirstMove) {
+
+		//capture where the mouse is initially on a new loaded screen
+		localWind->lastX = xPos;
+		localWind->lastY = yPos;
+		localWind->mouseFirstMove = false;
+
+	}
+
+	//the order of substraction affects if we will get inverted camera movements or normal camera movements!!
+	//below is the typical order for normal movements on a right hand plane
+	localWind->xChange = xPos - localWind->lastX;
+	localWind->yChange = localWind->lastY - yPos;
+
+	//update the last location variables
+	localWind->lastX = xPos;
+	localWind->lastY = yPos;
+
+	printf("x:%.6f, y:%.6f  \n", localWind->xChange, localWind->yChange);
 
 }
 

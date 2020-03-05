@@ -22,6 +22,9 @@ private:
 		GLfloat yChange;
 		bool mouseFirstMove;
 
+		void createCallbacks();
+		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void mouse_callback(GLFWwindow* window, double currX, double currY);
 
 public:
 	Wind();
@@ -29,12 +32,11 @@ public:
 
 	int initialIze();
 	bool shouldWIndowClose();
-	void createCallbacks();
-	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	static void mouse_callback(GLFWwindow* window, double currX, double currY);
 
+	
 	GLfloat getBufferWidth();
 	GLfloat getBufferHeight();
+	
 
 	void swapBuffers();
 
