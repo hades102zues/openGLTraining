@@ -112,7 +112,7 @@ int main(void) {
 		shaderList[0]->useShader(); //we actually spoil up the execute shader programs we put on the graphics card
 
 		uniformModel = shaderList[0]->getModelLocation();
-		glm::mat4 model = glm::mat4(1.0);
+		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
 		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));
 		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 

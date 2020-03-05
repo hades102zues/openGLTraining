@@ -148,6 +148,19 @@ void Wind::mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 
 }
 
+GLfloat Wind::getXChange() {
+	GLfloat theChange = xChange;
+	 xChange = 0;
+	return xChange;
+}
+
+GLfloat Wind::getYChange() {
+	
+	GLfloat theChange = yChange;
+	yChange = 0;
+	return yChange;
+}
+
 bool Wind::shouldWIndowClose() {
 
 	return glfwWindowShouldClose(mainWindow);
