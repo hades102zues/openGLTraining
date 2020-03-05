@@ -33,7 +33,10 @@ public:
 	int initialIze();
 	bool shouldWIndowClose();
 
-	
+	bool* getKeyPool() { return keyPool; };
+	GLfloat getXChange() {};
+	GLfloat getYChange() {};
+
 	GLfloat getBufferWidth();
 	GLfloat getBufferHeight();
 	
