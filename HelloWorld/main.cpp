@@ -127,7 +127,7 @@ int main(void) {
 		/*_drawphase*/
 
 
-		programWindow->swapBuffers(); //glfwSwapBuffers(window);
+		programWindow->swapBuffers();
 	}
 
 	programWindow->~Wind();
