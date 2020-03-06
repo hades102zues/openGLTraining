@@ -131,9 +131,6 @@ int main(void) {
 	}
 
 	programWindow->~Wind();
-	//glfwDestroyWindow(window);
-	//glfwTerminate();
-	
 
 	return 0;
 }
