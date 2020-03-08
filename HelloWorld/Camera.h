@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <GLFW/glfw3.h>
+
 class Camera {
     
 private:
@@ -21,7 +23,11 @@ private:
     GLfloat mouseSensitivity;
     GLfloat movementSpeedSensitivity; //for the keyboard
 
+    
+
 public :
     Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMouseSensitivity, GLfloat startMovementSpeedSensitivity);
+    void keyControl(bool* keyPool);
+    void  update();
     ~Camera();
 };
