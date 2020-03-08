@@ -54,6 +54,7 @@ void Camera::update() {
 
 glm::mat4 Camera::calculateViewMatrix() {
 	
+	
 	return glm::lookAt(position, front + position, up);
 
 	 
