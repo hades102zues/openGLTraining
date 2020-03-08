@@ -4,7 +4,7 @@
 Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMouseSensitivity, GLfloat startMovementSpeedSensitivity) {
 	
 	position = startPosition;
-	up = startUp; 
+	worldUp = startUp; 
 	yaw = startYaw;
 	pitch = startPitch;
 

@@ -18,6 +18,7 @@
 #include  "Mesh.h" //system that handles the data for object construction
 #include "Shader.h" //program for compiling the shaders
 #include "Wind.h" //our system window
+#include "Camera.h"
 
 
 
@@ -66,8 +67,18 @@ int main(void) {
 	std::vector<Mesh*> meshList; //idea here is that you have an array that keeps track of all the objects you will create
 	std::vector<Shader*> shaderList; //idea here is that you an array that keeps track of  all the shader Programs you will create
 
+	Camera* camera = new 
+		Camera(
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f),
+			0.0f,
+			0.0f,
+			5.0f,
+			1.0f
+		);
+
 	//shader variables 
-	GLuint uniformModel=0, uniformProjection=0;
+	GLuint uniformModel=0, uniformProjection=0, uniformView = 0;
 
 
 	 float toRadians = 3.14159265f  / 180.0f ;
@@ -81,13 +92,15 @@ int main(void) {
 	createShaders(shaderList);
 
 
-	uniformProjection = shaderList[0]->getProjectionLocation();
 	glm::mat4 matprojection = glm::perspective(45.0f, programWindow->getBufferWidth() / programWindow->getBufferHeight(), 0.1f, 100.0f);
 
 	//main loop
 	while (!programWindow->shouldWIndowClose()) {
+
 		//Get + Handle user inputs
 		glfwPollEvents();
+
+		camera->keyControl(programWindow->getKeyPool());
 
 		//backdrop between draws
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -110,15 +123,17 @@ int main(void) {
 		/*draw phase**/
 
 		shaderList[0]->useShader(); //we actually spoil up the execute shader programs we put on the graphics card
-
 		uniformModel = shaderList[0]->getModelLocation();
+		uniformProjection = shaderList[0]->getProjectionLocation();
+		uniformView = shaderList[0]->getViewLocation();
+		
 		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
 		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));
 		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(matprojection));
-
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->calculateViewMatrix()));
 	   
 		meshList[0]->renderMesh();
 		
