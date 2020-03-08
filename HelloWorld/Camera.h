@@ -27,7 +27,7 @@ private:
 
 public :
     Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMouseSensitivity, GLfloat startMovementSpeedSensitivity);
-    void keyControl(bool* keyPool);
+    void keyControl(bool* keyPool, GLfloat deltaTime);
     void  update();
     glm::mat4 calculateViewMatrix();
     ~Camera();

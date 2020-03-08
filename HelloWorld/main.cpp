@@ -71,7 +71,7 @@ int main(void) {
 		Camera(
 			glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 1.0f, 0.0f),
-			90.0f,
+			-90.0f,
 			0.0f,
 			5.0f,
 			1.0f
@@ -79,6 +79,9 @@ int main(void) {
 
 	//shader variables 
 	GLuint uniformModel=0, uniformProjection=0, uniformView = 0;
+
+	GLfloat deltaTime = 0.0f;
+	GLfloat lastTime = 0.0;
 
 
 	 float toRadians = 3.14159265f  / 180.0f ;
@@ -97,10 +100,17 @@ int main(void) {
 	//main loop
 	while (!programWindow->shouldWIndowClose()) {
 
+		GLfloat now = glfwGetTime();
+		deltaTime = now - lastTime;
+		lastTime = now;
+
+
 		//Get + Handle user inputs
 		glfwPollEvents();
 
-		camera->keyControl(programWindow->getKeyPool());
+		
+
+		camera->keyControl(programWindow->getKeyPool(), deltaTime);
 
 		//backdrop between draws
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

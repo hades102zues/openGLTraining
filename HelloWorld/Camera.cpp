@@ -18,22 +18,24 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	
 }
 
-void Camera::keyControl(bool* keyPool) {
+void Camera::keyControl(bool* keyPool, GLfloat deltaTime) {
+
+	GLfloat velocity = deltaTime * movementSpeedSensitivity;
 
 	if (keyPool[GLFW_KEY_W]) {
-		position += movementSpeedSensitivity * front;
+		position += velocity * front;
 	}
 
 	if (keyPool[GLFW_KEY_S]) {
-		position -= movementSpeedSensitivity * front;
+		position -= velocity * front;
 	}
 
 	if (keyPool[GLFW_KEY_A]) {
-		position -= right * movementSpeedSensitivity;
+		position -= right * velocity;
 	}
 
 	if (keyPool[GLFW_KEY_D]) {
-		position += right * movementSpeedSensitivity;
+		position += right * velocity;
 	}
 
 }
