@@ -15,10 +15,13 @@ private:
 
     glm::vec3 worldUp;
 
-    GLfloat pitch; //rotation around x-axis
-    GLfloat yaw; //rotation around y-axis
+    GLfloat pitch; //rotation around y-axis; The pitch will get the yChange of the mouse
+    GLfloat yaw; //rotation around x-axis; The yaw will get the xChange of the mouse
+
+    GLfloat mouseSensitivity;
+    GLfloat movementSpeedSensitivity; //for the keyboard
 
 public :
-    Camera();
+    Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMouseSensitivity, GLfloat startMovementSpeedSensitivity);
     ~Camera();
 };
