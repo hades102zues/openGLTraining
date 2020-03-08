@@ -7,6 +7,7 @@ Shader::Shader() {
 	shaderId = 0;
 	uniformModel = 0;
 	uniformProjection = 0;
+	uniformView = 0;
 
 }
 void Shader::createFromString(const char* vshaderStruct, const char* fshaderStruct) {
@@ -84,7 +85,7 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 
 	uniformModel = glGetUniformLocation(shaderId, "model");
 	uniformProjection = glGetUniformLocation(shaderId, "projection");
-
+	uniformView = glGetUniformLocation(shaderId, "view");
 }
 
 std::string Shader::readFile( const char* fileLocation) {
@@ -117,6 +118,10 @@ GLuint Shader::getProjectionLocation() {
 }
 GLuint Shader::getModelLocation() {
 	return uniformModel;
+}
+
+GLuint Shader::getViewLocation() {
+	return uniformView;
 }
 
 void Shader::useShader() {
