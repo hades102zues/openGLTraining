@@ -73,7 +73,7 @@ int main(void) {
 			glm::vec3(0.0f, 1.0f, 0.0f),
 			-90.0f,
 			0.0f,
-			5.0f,
+			0.5,
 			1.0f
 		);
 
@@ -109,8 +109,9 @@ int main(void) {
 		glfwPollEvents();
 
 		
-
+		//these should also come after the poll event
 		camera->keyControl(programWindow->getKeyPool(), deltaTime);
+		camera->mouseControl(programWindow->getXChange(), programWindow->getYChange());
 
 		//backdrop between draws
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

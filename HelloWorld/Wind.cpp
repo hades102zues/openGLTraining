@@ -108,12 +108,12 @@ void Wind::key_callback(GLFWwindow* window, int key, int scancode, int action, i
 
 		if (action == GLFW_PRESS) {
 			localWind->keyPool[key] = true;
-			printf("key pressed: %d \n", key);
+		
 		}
 
 		else if (action == GLFW_RELEASE) {
 			localWind->keyPool[key] = false;
-			printf("key released: %d \n", key);
+		
 		}
 
 	}
@@ -144,21 +144,21 @@ void Wind::mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 	localWind->lastX = xPos;
 	localWind->lastY = yPos;
 
-	printf("x:%.6f, y:%.6f  \n", localWind->xChange, localWind->yChange);
+
 
 }
 
 GLfloat Wind::getXChange() {
 	GLfloat theChange = xChange;
 	 xChange = 0;
-	return xChange;
+	return theChange;
 }
 
 GLfloat Wind::getYChange() {
 	
 	GLfloat theChange = yChange;
 	yChange = 0;
-	return yChange;
+	return theChange;
 }
 
 bool Wind::shouldWIndowClose() {
