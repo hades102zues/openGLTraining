@@ -68,8 +68,7 @@ void Camera::update() {
 	front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
 	front = glm::normalize(front);
 
-	//camera's direction = front + position
-	glm::vec3 direction = front + position;
+	
 	right = glm::normalize(glm::cross(front, worldUp));// ORDER MATTERS!!
 	up = glm::normalize(glm::cross(right, front));// ORDER MATTERS!!
 
