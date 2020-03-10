@@ -42,7 +42,7 @@ void Camera::keyControl(bool* keyPool, GLfloat deltaTime) {
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange) {
 
-	printf("xChange :%f\n");
+	
 	xChange *= this->mouseSensitivity;
 	yChange *= this->mouseSensitivity;
 
