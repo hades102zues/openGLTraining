@@ -1,3 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION //only way to use the stb_image.h properly
+
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
