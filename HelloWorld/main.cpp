@@ -30,18 +30,23 @@ void createObjects(std::vector<Mesh*> &list) {
 
     unsigned int indices[] = {
 			0, 3, 1,
-		    1, 3, 2,
+	        1, 3, 2,
 		    2, 3, 0,
 		    0, 1, 2,
-
+			
 	};
+
 
 	GLfloat vertices[]= {
 			-1.0f, -1.0f, 0.0f //index 0
 			,0.0f, -1.0f, 1.0f // index 1
 		    ,1.0f, -1.0f, 0.0f // index 2
 		    ,0.0f, 1.0f, 0.0f //index 3
+		    ,0.0f,-1.0f,-1.0f
+
+		
 	};
+
 
 	Mesh* obj1 = new Mesh();
 	obj1->createMesh(vertices, indices, 12, 12);
@@ -140,7 +145,7 @@ int main(void) {
 		
 		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
 		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));
-		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(matprojection));
