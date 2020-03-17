@@ -45,6 +45,24 @@ void Texture::loadTexture() {
 	stbi_image_free(textureData);
 }
 
-Texture::~Texture() {
+void Texture::useTexture() {
+	
+	//commision a texture sampler at texture unit 0
+	glActiveTexture(GL_TEXTURE0);
 
+	//associate a texture object with the texture unit
+	glBindTexture(GL_TEXTURE_2D, textureId);
+
+}
+
+
+void Texture::clearTexture() {
+	textureId = 0;
+	width = height = bitDepth = 0;
+	fileLocation = nullptr;
+	glDeleteTextures(1, &textureId);
+}
+
+Texture::~Texture() {
+	clearTexture();
 }
