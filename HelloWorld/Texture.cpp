@@ -18,8 +18,8 @@ Texture::Texture(char* fileLoc) {
 void Texture::loadTexture() {
 
 	//use stb to load the data
-	unsigned char* textureData = stbi_load(fileLocation, &width, &height, &bitDepth);
-
+	unsigned char* textureData = stbi_load(fileLocation, &width, &height, &bitDepth, 0);
+	
 	if (!textureData) {
 		printf("Error Loading texture.");
 	}
