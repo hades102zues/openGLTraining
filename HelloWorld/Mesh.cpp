@@ -22,7 +22,14 @@ void Mesh::createMesh(GLfloat* vertices, unsigned int* indices, unsigned int num
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
 
-	//(attribute location, number of elements per grab, element type, ?, how many items to skip till next grab starting point-- in bytes, start grab start point at index....)
+	/*
+		Location of the vertex attribute in the shader,
+		Number of items being passed in at a time,
+		The data type of the data,
+		Normalisation,
+		how many values to skip to get to the next input submission,
+		at what index to start submitting values from
+	*/
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5,  0);
 	glEnableVertexAttribArray(0);
 
