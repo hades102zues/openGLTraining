@@ -18,9 +18,9 @@ private:
    //values necesary to keep track of mouse movements
 		GLfloat lastX;
 		GLfloat lastY;
-		GLfloat xChange;
-		GLfloat yChange;
-		bool mouseFirstMove;
+		GLfloat xChange; //this players get passed to the camera; used in yaw calculation
+		GLfloat yChange; //this gets passed to the camera; pitch calculation
+		bool mouseFirstMove; //prevents camera jump on initial mouse movement
 
 		void createCallbacks();
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

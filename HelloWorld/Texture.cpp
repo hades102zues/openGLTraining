@@ -33,7 +33,7 @@ void Texture::loadTexture() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	//attach texture data to texture object. BTW if you get some screwed up lucking output then change to GL_RGB
+	//attach texture data to texture object. BTW if you get some screwed up looking output then change to GL_RGB
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
 
 	//automatically generate mipmap

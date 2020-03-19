@@ -20,7 +20,8 @@ private:
     GLfloat pitch; //rotation around y-axis; The pitch will get the yChange of the mouse
     GLfloat yaw; //rotation around x-axis; The yaw will get the xChange of the mouse
 
-    GLfloat mouseSensitivity;
+    //the following are for fine tunning the movement
+    GLfloat mouseSensitivity; 
     GLfloat movementSpeedSensitivity; //for the keyboard
 
     
