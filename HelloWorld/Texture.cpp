@@ -6,7 +6,7 @@ Texture::Texture() {
 	fileLocation = nullptr;
 }
 
-Texture::Texture(char* fileLoc) {
+Texture::Texture(const char* fileLoc) {
 	textureId = 0;
 	width = height = bitDepth = 0;
 	fileLocation = fileLoc;

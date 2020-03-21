@@ -21,6 +21,7 @@
 #include "Shader.h" //program for compiling the shaders
 #include "Wind.h" //our system window
 #include "Camera.h"
+#include "Texture.h"
 
 
 
@@ -83,6 +84,13 @@ int main(void) {
 			0.5,
 			1.0f
 		);
+
+	//Textures
+	Texture* brickTexture = new Texture("./Textures/brick.png");
+	Texture* dirtTexture = new Texture("./Textures/dirt.png");
+
+	brickTexture->loadTexture();
+	dirtTexture->loadTexture();
 
 	//shader variables 
 	GLuint uniformModel=0, uniformProjection=0, uniformView = 0;

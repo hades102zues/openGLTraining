@@ -13,7 +13,7 @@ private:
 
 public:
 	Texture();
-	Texture(char* fileLoc);
+	Texture(const char* fileLoc);
 
 	void loadTexture();
 	void useTexture();

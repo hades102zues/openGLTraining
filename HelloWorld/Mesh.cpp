@@ -11,6 +11,8 @@ void Mesh::createMesh(GLfloat* vertices, unsigned int* indices, unsigned int num
 
 	indexCount = numOfIndices;
 
+
+	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -43,6 +45,8 @@ void Mesh::createMesh(GLfloat* vertices, unsigned int* indices, unsigned int num
 }
 
 void Mesh::renderMesh() {
+
+	//THIS IS ACTUALLY THE CORRECT PLACE TO BE ACTIVATING THE VERTEXATTRIBARRAYS
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
