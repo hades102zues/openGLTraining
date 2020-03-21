@@ -9,7 +9,7 @@ private:
 	int width;
 	int bitDepth;
 	GLuint textureId;
-	char* fileLocation;
+	const char* fileLocation;
 
 public:
 	Texture();

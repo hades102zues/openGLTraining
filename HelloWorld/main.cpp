@@ -41,18 +41,19 @@ void createObjects(std::vector<Mesh*> &list) {
 
 
 	GLfloat vertices[]= {
-			-1.0f, -1.0f, 0.0f //index 0
-			,0.0f, -1.0f, 1.0f // index 1
-		    ,1.0f, -1.0f, 0.0f // index 2
-		    ,0.0f, 1.0f, 0.0f //index 3
-		    ,0.0f,-1.0f,-1.0f
+		//*** x,       y,       z,       u,       v
+			-1.0f , -1.0f,  0.0f,    0.0f,     0.0f,			//index 0
+			0.0f, -1.0f,   1.0f,    0.5f,	    0.0f,			// index 1
+		    1.0f, -1.0f,   0.0f ,   1.0f,      0.0f,			// index 2
+		    0.0f, 1.0f,    0.0f,    0.5f,      1.0f			//index 3
+		   
 
 		
 	};
 
 
 	Mesh* obj1 = new Mesh();
-	obj1->createMesh(vertices, indices, 12, 12);
+	obj1->createMesh(vertices, indices, 20, 12);
 	list.push_back(obj1);
 	
 }
@@ -161,6 +162,8 @@ int main(void) {
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(matprojection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->calculateViewMatrix()));
 	   
+
+		brickTexture->useTexture();
 		meshList[0]->renderMesh();
 		
 
