@@ -1,10 +1,14 @@
 												
 #version 330																				
 																									
-in vec4  vColor; 																			
-																									
+in vec4  vColor; 	
+in vec2 texCoord;																		
+
+uniform sampler2D sampler;
+
 out vec4 color;																				
 																									
 void main () {																				
-    color = vColor;																			
+    color = vColor;	
+    color = texture(sampler, texCoord);																		
 }

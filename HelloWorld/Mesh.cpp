@@ -11,6 +11,8 @@ void Mesh::createMesh(GLfloat* vertices, unsigned int* indices, unsigned int num
 
 	indexCount = numOfIndices;
 
+
+	
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -22,8 +24,19 @@ void Mesh::createMesh(GLfloat* vertices, unsigned int* indices, unsigned int num
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	/*
+		Location of the vertex attribute in the shader,
+		Number of items being passed in at a time,
+		The data type of the data,
+		Normalisation,
+		how many values to skip to get to the next input submission, in btyes
+		how many item we skip to get to the first value, in btyes
+	*/
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5,  0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1,2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5,  (void*) ( sizeof(vertices[0]) * 3) );
+	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -32,6 +45,8 @@ void Mesh::createMesh(GLfloat* vertices, unsigned int* indices, unsigned int num
 }
 
 void Mesh::renderMesh() {
+
+	//THIS IS ACTUALLY THE CORRECT PLACE TO BE ACTIVATING THE VERTEXATTRIBARRAYS
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);

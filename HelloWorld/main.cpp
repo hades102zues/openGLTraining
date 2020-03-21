@@ -1,3 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION //only way to use the stb_image.h properly
+
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -15,8 +17,11 @@
 #include <glm/gtc/type_ptr.hpp> //convert our glm matrix to something useable in the shader
 
 
-#include  "Mesh.h"
-#include "Shader.h"
+#include  "Mesh.h" //system that handles the data for object construction
+#include "Shader.h" //program for compiling the shaders
+#include "Wind.h" //our system window
+#include "Camera.h"
+#include "Texture.h"
 
 
 
@@ -28,21 +33,27 @@ void createObjects(std::vector<Mesh*> &list) {
 
     unsigned int indices[] = {
 			0, 3, 1,
-		    1, 3, 2,
+	        1, 3, 2,
 		    2, 3, 0,
 		    0, 1, 2,
-
+			
 	};
+
 
 	GLfloat vertices[]= {
-			-1.0f, -1.0f, 0.0f //index 0
-			,0.0f, -1.0f, 1.0f // index 1
-		    ,1.0f, -1.0f, 0.0f // index 2
-		    ,0.0f, 1.0f, 0.0f //index 3
+		//*** x,       y,       z,       u,       v
+			-1.0f , -1.0f,  0.0f,    0.0f,     0.0f,			//index 0
+			0.0f, -1.0f,   1.0f,    0.5f,	    0.0f,			// index 1
+		    1.0f, -1.0f,   0.0f ,   1.0f,      0.0f,			// index 2
+		    0.0f, 1.0f,    0.0f,    0.5f,      1.0f			//index 3
+		   
+
+		
 	};
 
+
 	Mesh* obj1 = new Mesh();
-	obj1->createMesh(vertices, indices, 12, 12);
+	obj1->createMesh(vertices, indices, 20, 12);
 	list.push_back(obj1);
 	
 }
@@ -59,85 +70,64 @@ void createShaders(std::vector<Shader*> &list) {
 
 int main(void) {
 
-	const GLint width = 1028, height = 768; //for the window
+	Wind* programWindow = new Wind(800, 600); 
+	programWindow->initialIze();
 	
-	std::vector<Mesh*> meshList;
-	std::vector<Shader*> shaderList;
+	std::vector<Mesh*> meshList; //idea here is that you have an array that keeps track of all the objects you will create
+	std::vector<Shader*> shaderList; //idea here is that you an array that keeps track of  all the shader Programs you will create
+
+	Camera* camera = new 
+		Camera(
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f),
+			-90.0f,
+			0.0f,
+			0.5,
+			1.0f
+		);
+
+	//Textures
+	Texture* brickTexture = new Texture("./Textures/brick.png");
+	Texture* dirtTexture = new Texture("./Textures/dirt.png");
+
+	brickTexture->loadTexture();
+	dirtTexture->loadTexture();
+
 	//shader variables 
-	GLuint uniformModel=0, uniformProjection=0;
+	GLuint uniformModel=0, uniformProjection=0, uniformView = 0;
 
+	GLfloat deltaTime = 0.0f;
+	GLfloat lastTime = 0.0;
 
-	
 
 	 float toRadians = 3.14159265f  / 180.0f ;
 	 float currentAngle = 0.0f;
 
 	 float maxOffset = 0.7f, triOffset = 0.0f, triIncrement = 0.0005f;
 	 bool direction = true;
-	
-	
-
-	/************glfw**************/
-
-	if (!glfwInit()) {
-		std::cout << "GLFW Initialization Failed";
-		glfwTerminate();
-		return -1;
-	}
-	 //set some window properties
-	 
-	 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); //opengl version support 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); //opengl version support 
-	
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //core profile = no backwards compat.
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); //forwards compatibility ;)
-
-
-	GLFWwindow* window = glfwCreateWindow(width, height, "Fengine", NULL, NULL);
-	if (!window) {
-		std::cout << "Window Creation Failed";
-		glfwDestroyWindow(window);
-		glfwTerminate();
-		return -1;
-	}
-
-	//grab some buffer info
-	int bufferWidth, bufferHeight;
-	glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
-
-	//tell glew what is the current window it will be drawing to (aka set context)
-	glfwMakeContextCurrent(window);
-
-	/***GLEW***/
-	glewExperimental= GL_TRUE; //enables extensions. Always set this.
-
-	if (glewInit() != GLEW_OK) {
-		glfwDestroyWindow(window);
-		glfwTerminate();
-		std::cout << "Glew Init Failed";
-		return -1;
-	}
-
-	//tie opengl to the buffers
-	glViewport(0, 0, bufferWidth, bufferHeight);
-
-
 
 	
 	createObjects(meshList);
 	createShaders(shaderList);
 
 
-	glEnable(GL_DEPTH_TEST);
-
-	uniformProjection = shaderList[0]->getProjectionLocation();
-	glm::mat4 matprojection = glm::perspective(45.0f, (GLfloat)bufferWidth / (GLfloat) bufferHeight, 0.1f, 100.0f);
+	glm::mat4 matprojection = glm::perspective(45.0f, programWindow->getBufferWidth() / programWindow->getBufferHeight(), 0.1f, 100.0f);
 
 	//main loop
-	while (!glfwWindowShouldClose(window)) {
+	while (!programWindow->shouldWIndowClose()) {
+
+		GLfloat now = glfwGetTime();
+		deltaTime = now - lastTime;
+		lastTime = now;
+
+
 		//Get + Handle user inputs
 		glfwPollEvents();
+
+		
+		//these should also come after the poll event
+		camera->keyControl(programWindow->getKeyPool(), deltaTime);
+		camera->mouseControl(programWindow->getXChange(), programWindow->getYChange());
 
 		//backdrop between draws
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -160,31 +150,31 @@ int main(void) {
 		/*draw phase**/
 
 		shaderList[0]->useShader(); //we actually spoil up the execute shader programs we put on the graphics card
-
 		uniformModel = shaderList[0]->getModelLocation();
-		glm::mat4 model = glm::mat4(1.0);
+		uniformProjection = shaderList[0]->getProjectionLocation();
+		uniformView = shaderList[0]->getViewLocation();
+		
+		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
 		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));
-		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(matprojection));
-
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->calculateViewMatrix()));
 	   
+
+		brickTexture->useTexture();
 		meshList[0]->renderMesh();
 		
 
-		glBindVertexArray(0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glUseProgram(0);
 		/*_drawphase*/
 
 
-		glfwSwapBuffers(window);
+		programWindow->swapBuffers();
 	}
 
-	glfwDestroyWindow(window);
-	glfwTerminate();
-	
-	std::cout << "Hello World";
+	programWindow->~Wind();
+
 	return 0;
 }
