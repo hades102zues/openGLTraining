@@ -22,6 +22,7 @@
 #include "Wind.h" //our system window
 #include "Camera.h"
 #include "Texture.h"
+#include "Light.h"
 
 
 
@@ -86,6 +87,8 @@ int main(void) {
 			1.0f
 		);
 
+	Light* mainLight = new Light();
+
 	//Textures
 	Texture* brickTexture = new Texture("./Textures/brick.png");
 	Texture* dirtTexture = new Texture("./Textures/dirt.png");
@@ -94,7 +97,12 @@ int main(void) {
 	dirtTexture->loadTexture();
 
 	//shader variables 
-	GLuint uniformModel=0, uniformProjection=0, uniformView = 0;
+	GLuint 
+		uniformModel=0, 
+		uniformProjection=0, 
+		uniformView = 0,
+		uniformAmbientColor =0,
+		uniformAmbientIntensity = 0;
 
 	GLfloat deltaTime = 0.0f;
 	GLfloat lastTime = 0.0;
@@ -153,6 +161,10 @@ int main(void) {
 		uniformModel = shaderList[0]->getModelLocation();
 		uniformProjection = shaderList[0]->getProjectionLocation();
 		uniformView = shaderList[0]->getViewLocation();
+		uniformAmbientColor = shaderList[0]->getAmbientColor();
+		uniformAmbientIntensity = shaderList[0]->getAmbientIntensity();
+
+		mainLight->useLight(uniformAmbientIntensity, uniformAmbientColor);
 		
 		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
 		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));

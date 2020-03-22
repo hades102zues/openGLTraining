@@ -88,6 +88,8 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 	uniformView = glGetUniformLocation(shaderId, "view");
 	uniformAmbientColor = glGetUniformLocation(shaderId, "directionalLight.color");
 	uniformAmbientIntensity = glGetUniformLocation(shaderId, "directionalLight.ambientIntensity");
+
+	
 }
 
 std::string Shader::readFile( const char* fileLocation) {
