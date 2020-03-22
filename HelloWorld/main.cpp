@@ -87,7 +87,7 @@ int main(void) {
 			1.0f
 		);
 
-	Light* mainLight = new Light();
+	Light* mainLight = new Light(1.0f, 1.0f, 1.0f, 0.1005f);
 
 	//Textures
 	Texture* brickTexture = new Texture("./Textures/brick.png");
