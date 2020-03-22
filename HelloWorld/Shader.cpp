@@ -86,6 +86,8 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 	uniformModel = glGetUniformLocation(shaderId, "model");
 	uniformProjection = glGetUniformLocation(shaderId, "projection");
 	uniformView = glGetUniformLocation(shaderId, "view");
+	uniformAmbientColor = glGetUniformLocation(shaderId, "directionalLight.color");
+	uniformAmbientIntensity = glGetUniformLocation(shaderId, "directionalLight.ambientIntensity");
 }
 
 std::string Shader::readFile( const char* fileLocation) {
@@ -123,6 +125,15 @@ GLuint Shader::getModelLocation() {
 GLuint Shader::getViewLocation() {
 	return uniformView;
 }
+
+GLuint Shader::getAmbientColor() {
+	return uniformAmbientColor;
+}
+
+GLuint Shader::getAmbientIntensity() {
+	return uniformAmbientIntensity;
+}
+
 
 void Shader::useShader() {
 	glUseProgram(shaderId);
