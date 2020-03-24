@@ -60,6 +60,20 @@ void calcAverageNormal(unsigned int* indices, unsigned int indicesCount, GLfloat
 
 	}
 
+	for (size_t i = 0; verticeCount / vLengthOffset; i++) { 
+
+		// i * vLengthOffset will take us to the first item of each line, of our vertices[]
+
+		unsigned int nFirst = vertices[i * vLengthOffset + normalInlineOffset];//will get the index of the x coord of the normal
+
+		glm::vec3 vec(vertices[nFirst], vertices[nFirst + 1], vertices[nFirst + 2]); //pull the normal
+		
+		vec = glm::normalize(vec);
+
+		vertices[nFirst] = vec.x; vertices[nFirst + 1] = vec.y; vertices[nFirst + 2] = vec.z;
+
+	}
+
 
 
 
