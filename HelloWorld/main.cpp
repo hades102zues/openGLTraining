@@ -52,13 +52,16 @@ void calcAverageNormal(unsigned int* indices, unsigned int indicesCount, GLfloat
 
 
 		//now update the normals coordinates of each vertex we used above. Take note 
-		//that in updating we will add. this has a nice averaging effect on the normal and smoothes out our light
+		//that in updating we will add. we will be averaging the values later on
 		vertices[in0 + normalInlineOffset] += normal.x;	vertices[in0 + normalInlineOffset + 1] += normal.y; vertices[in0 + normalInlineOffset + 2] += normal.z;
 		vertices[in1 + normalInlineOffset] += normal.x; vertices[in1 + normalInlineOffset + 1] += normal.y; vertices[in1 + normalInlineOffset + 2] += normal.z;
 		vertices[in2 + normalInlineOffset] += normal.x; vertices[in2 + normalInlineOffset + 1] += normal.y; vertices[in2 + normalInlineOffset + 2] += normal.z;
 		
 
 	}
+
+
+
 
 }
 
