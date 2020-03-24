@@ -72,6 +72,8 @@ void calcAverageNormal(unsigned int* indices, unsigned int indicesCount, GLfloat
 
 		vertices[nFirst] = vec.x; vertices[nFirst + 1] = vec.y; vertices[nFirst + 2] = vec.z;
 
+
+		//Funny enough we don't actually need to find the average. don't ask me why. it is what it is.
 	}
 
 
@@ -90,6 +92,8 @@ void createObjects(std::vector<Mesh*> &list) {
 	};
 
 
+	
+
 	GLfloat vertices[]= {
 		//*** x,       y,       z,       u,       v				nx				ny				nz
 			-1.0f , -1.0f,  0.0f,    0.0f,     0.0f,			0.0f,			0.0f,        0.0f,			//index 0
@@ -101,9 +105,11 @@ void createObjects(std::vector<Mesh*> &list) {
 		
 	};
 
+	calcAverageNormal(indices, 12, vertices, 32, 8, 5);
+
 
 	Mesh* obj1 = new Mesh();
-	obj1->createMesh(vertices, indices, 20, 12);
+	obj1->createMesh(vertices, indices, 32, 12);
 	list.push_back(obj1);
 	
 }
