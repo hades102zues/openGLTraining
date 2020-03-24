@@ -30,6 +30,38 @@ static const char* fShaderStruct = "../ShaderStructs/shader.fragment.txt";
 static const char* vShaderStruct = "../ShaderStructs/shader.vertex.txt";
 
 
+
+void calcAverageNormal(unsigned int* indices, unsigned int indicesCount, GLfloat * vertices, unsigned int verticeCount, unsigned int vLengthOffset, unsigned int normalInlineOffset) {
+
+	for (size_t i = 0; i < indicesCount; i += 3) {		//will go to first element of  each line of the indices[]
+
+		//these three variables will effectively take on the index of some X-coord,  each on different lines, thrice consecutive order
+		// for e.g indices[1] = 3 * vlengthOffset = 8 would take us to  index 24 of vertices.
+		//tis a very cool way to navigate
+		unsigned int in0 = indices[ i ] * vLengthOffset;
+		unsigned int in1 = indices[ i + 1 ] * vLengthOffset; 
+		unsigned int in2 = indices[ i + 2 ] * vLengthOffset; 
+
+
+		//next we produce a vector that would connect each pair of vertices
+		glm::vec3 v1(vertices[in1] - vertices[in0], vertices[in1+1] - vertices[in0+1], vertices[in1+2] -vertices[in0+2]);
+		glm::vec3 v2(vertices[in2] - vertices[in1], vertices[in2+1] - vertices[in1 + 1], vertices[in2+2] - vertices[in1 + 2]);
+
+		//hence v1 ' v2 will form a plane which we can then find a normal from
+		glm::vec3 normal = glm::normalize( glm::cross(v1,v2) );
+
+
+		//now update the normals coordinates of each vertex we used above. Take note 
+		//that in updating we will add. this has a nice averaging effect on the normal and smoothes out our light
+		vertices[in0 + normalInlineOffset] += normal.x;	vertices[in0 + normalInlineOffset + 1] += normal.y; vertices[in0 + normalInlineOffset + 2] += normal.z;
+		vertices[in1 + normalInlineOffset] += normal.x; vertices[in1 + normalInlineOffset + 1] += normal.y; vertices[in1 + normalInlineOffset + 2] += normal.z;
+		vertices[in2 + normalInlineOffset] += normal.x; vertices[in2 + normalInlineOffset + 1] += normal.y; vertices[in2 + normalInlineOffset + 2] += normal.z;
+		
+
+	}
+
+}
+
 void createObjects(std::vector<Mesh*> &list) {
 
     unsigned int indices[] = {
@@ -42,11 +74,11 @@ void createObjects(std::vector<Mesh*> &list) {
 
 
 	GLfloat vertices[]= {
-		//*** x,       y,       z,       u,       v
-			-1.0f , -1.0f,  0.0f,    0.0f,     0.0f,			//index 0
-			0.0f, -1.0f,   1.0f,    0.5f,	    0.0f,			// index 1
-		    1.0f, -1.0f,   0.0f ,   1.0f,      0.0f,			// index 2
-		    0.0f, 1.0f,    0.0f,    0.5f,      1.0f			//index 3
+		//*** x,       y,       z,       u,       v				nx				ny				nz
+			-1.0f , -1.0f,  0.0f,    0.0f,     0.0f,			0.0f,			0.0f,        0.0f,			//index 0
+			0.0f, -1.0f,   1.0f,    0.5f,	    0.0f,			0.0f,			0.0f,        0.0f,			// index 1
+		    1.0f, -1.0f,   0.0f ,   1.0f,      0.0f,			0.0f,			0.0f,        0.0f,			// index 2
+		    0.0f, 1.0f,    0.0f,    0.5f,      1.0f,			0.0f,			0.0f,        0.0f			//index 3
 		   
 
 		
