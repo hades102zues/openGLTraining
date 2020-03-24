@@ -15,7 +15,9 @@ private:
 			uniformProjection, 
 			uniformView,
 			uniformAmbientIntensity,
-			uniformAmbientColor;
+			uniformAmbientColor,
+		    uniformDiffusionIntensity,
+		    uniformLightDirection;
 
 	void compileShader(const char* vshaderStruct, const char* fshaderStruct);
 	void addShader(GLuint& shaderProgram, GLenum shaderType, const char* shaderStruct);
@@ -33,6 +35,8 @@ public:
 	GLuint getViewLocation();
 	GLuint getAmbientIntensity();
 	GLuint getAmbientColor();
+	GLuint getDiffusionIntensityLocation();
+	GLuint getLightDirectionLocation();
 
 	void useShader();
 	void clearShader();
