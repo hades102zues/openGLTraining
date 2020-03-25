@@ -142,7 +142,8 @@ int main(void) {
 			1.0f
 		);
 
-	Light* mainLight = new Light(1.0f, 1.0f, 1.0f, 0.1005f);
+	Light* mainLight = new Light(1.0f, 1.0f, 1.0f, 0.1005f,
+													2.0f, -1.0f,-2.0f,1.0f);
 
 	//Textures
 	Texture* brickTexture = new Texture("./Textures/brick.png");
@@ -157,7 +158,9 @@ int main(void) {
 		uniformProjection=0, 
 		uniformView = 0,
 		uniformAmbientColor =0,
-		uniformAmbientIntensity = 0;
+		uniformAmbientIntensity = 0,
+		uniformLightDirection = 0,
+		uniformDiffusionIntensity = 0;
 
 	GLfloat deltaTime = 0.0f;
 	GLfloat lastTime = 0.0;
@@ -216,10 +219,14 @@ int main(void) {
 		uniformModel = shaderList[0]->getModelLocation();
 		uniformProjection = shaderList[0]->getProjectionLocation();
 		uniformView = shaderList[0]->getViewLocation();
+
 		uniformAmbientColor = shaderList[0]->getAmbientColor();
 		uniformAmbientIntensity = shaderList[0]->getAmbientIntensity();
+		uniformLightDirection = shaderList[0]->getLightDirectionLocation();
+		uniformDiffusionIntensity = shaderList[0]->getDiffusionIntensityLocation();
 
-		mainLight->useLight(uniformAmbientIntensity, uniformAmbientColor);
+
+		mainLight->useLight(uniformAmbientIntensity, uniformAmbientColor, uniformDiffusionIntensity, uniformLightDirection);
 		
 		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
 		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));
