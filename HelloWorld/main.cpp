@@ -73,7 +73,7 @@ void calcAverageNormal(unsigned int* indices, unsigned int indicesCount, GLfloat
 		vertices[nFirst] = vec.x; vertices[nFirst + 1] = vec.y; vertices[nFirst + 2] = vec.z;
 
 
-		//Funny enough we don't actually need to find the average. don't ask me why. it is what it is.
+		//Funny enough we don't actually need to find the average just normalize the sum. don't ask me why. it is what it is.
 	}
 
 
