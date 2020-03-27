@@ -145,7 +145,7 @@ int main(void) {
 		);
 
 	Light* mainLight = new Light(1.0f, 1.0f, 1.0f, 0.1005f,
-													2.0f, -1.0f,-2.0f,1.0f);
+													56.0f, 10.0f,7.0f,1.0f);
 
 	//Textures
 	Texture* brickTexture = new Texture("./Textures/brick.png");
@@ -232,7 +232,7 @@ int main(void) {
 		
 		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
 		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));
-		//model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(matprojection));
