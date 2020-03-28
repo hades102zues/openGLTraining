@@ -3,7 +3,8 @@
 																									
 in vec4  vColor; 	
 in vec2 texCoord;	
-in vec3 Normal;																	
+in vec3 Normal;	
+in vec3 FragPos;																
 
 uniform sampler2D sampler;
 
@@ -13,7 +14,7 @@ struct DirectionalLight {
     vec3 color;
     float ambientIntensity;
 	
-	vec3 direction;
+	vec3 direction; //the position of the light. the guy in the tutorial was not completely correct on the idea behind this
 	float diffuseIntensity;
 };	
 
@@ -22,8 +23,10 @@ uniform DirectionalLight directionalLight;
 void main () {																				
     
     vec4 ambientColor = vec4(directionalLight.color, 1.0f) * directionalLight.ambientIntensity;	
-
-    float diffusionFactor = max(dot(normalize(Normal), normalize(directionalLight.direction)), 0.0f);	
+	
+	vec3 lightDir = normalize(directionalLight.direction - FragPos);//a vector from frag position to the light source
+	
+    float diffusionFactor = max(dot(normalize(Normal), lightDir), 0.0f);	
 	vec4 diffuseColor = vec4(directionalLight.color, 1.0f) * directionalLight.diffuseIntensity * diffusionFactor;
 	
 	color = texture(sampler, texCoord) * (ambientColor + diffuseColor );		

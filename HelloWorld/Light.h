@@ -14,7 +14,7 @@ private:
 	glm::vec3 colour;
 	GLfloat ambientIntensity; //a scalar amount as well
 
-	glm::vec3 direction; //direction the light is going
+	glm::vec3 direction; //should actually be the position of the light. The tutorial guy had messed up  a part of the concept. I fixed up the code to agree with the concept by i am not changing the name...
 	GLfloat diffusionIntensity;
 
 
