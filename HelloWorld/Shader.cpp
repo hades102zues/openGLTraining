@@ -90,6 +90,9 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 	uniformAmbientIntensity = glGetUniformLocation(shaderId, "directionalLight.ambientIntensity");
 	uniformDiffusionIntensity = glGetUniformLocation(shaderId, "directionalLight.diffuseIntensity");
 	uniformLightDirection = glGetUniformLocation(shaderId, "directionalLight.direction");
+	uniformCameraPosition = glGetUniformLocation(shaderId, "cameraPos");
+	uniformMaterialSpecIntensity = glGetUniformLocation(shaderId, "material.specularIntensity");
+	uniformMaterialShininess = glGetUniformLocation(shaderId, "material.shininess");
 
 	
 }
@@ -144,6 +147,18 @@ GLuint Shader::getDiffusionIntensityLocation() {
 GLuint Shader::getLightDirectionLocation() {
 
 	return uniformLightDirection;
+}
+
+GLuint Shader::getCameraPosLocation() {
+	return uniformCameraPosition;
+}
+
+GLuint Shader::getMaterialSpecIntLocation() {
+	return uniformMaterialSpecIntensity;
+}
+
+GLuint Shader::getMaterialShineLocation() {
+	return uniformMaterialShininess;
 }
 
 void Shader::useShader() {

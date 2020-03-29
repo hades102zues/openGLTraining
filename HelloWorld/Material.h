@@ -14,7 +14,7 @@ public :
 	Material();
 	Material(GLfloat sIntensity, GLfloat shine);
 
-	useMaterial(GLuint specularIntensityLocation, GLuint shininessLocation);
+	void useMaterial(GLuint specularIntensityLocation, GLuint shininessLocation);
 
 	~Material();
 

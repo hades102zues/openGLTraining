@@ -6,9 +6,8 @@ in vec2 texCoord;
 in vec3 Normal;	
 in vec3 FragPos;																
 
-uniform sampler2D sampler;
+out vec4 color;		
 
-out vec4 color;	
 
 struct DirectionalLight {
     vec3 color;
@@ -18,16 +17,50 @@ struct DirectionalLight {
 	float diffuseIntensity;
 };	
 
-uniform DirectionalLight directionalLight;																		
+struct Material {
+	
+	float specularIntensity;
+	float shininess;
+
+};
+
+uniform DirectionalLight directionalLight;	
+uniform Material material;
+uniform sampler2D sampler;
+uniform vec3 cameraPos;
+																
 																									
-void main () {																				
-    
+void main () {			
+		
+	vec3 lightDir = normalize(directionalLight.direction - FragPos);//a vector from frag position to the light source
+	vec3 eyeDir = normalize( cameraPos - FragPos);	//a vector from frag position to camera
+	vec3 norm = normalize(Normal); //absolutely neccesary.
+	
+	
+	
+	//There is a bit more to these calculations that Ben Cook missed ... >.>
+	
+    //ambient
     vec4 ambientColor = vec4(directionalLight.color, 1.0f) * directionalLight.ambientIntensity;	
 	
-	vec3 lightDir = normalize(directionalLight.direction - FragPos);//a vector from frag position to the light source
-	
-    float diffusionFactor = max(dot(normalize(Normal), lightDir), 0.0f);	
+	//diffusion	
+    float diffusionFactor = max(dot(norm, lightDir), 0.0f);	
 	vec4 diffuseColor = vec4(directionalLight.color, 1.0f) * directionalLight.diffuseIntensity * diffusionFactor;
 	
-	color = texture(sampler, texCoord) * (ambientColor + diffuseColor );		
+	//specular
+	vec3 reflectRay = normalize(reflect(-lightDir, norm));
+	float spec = pow(max(dot(eyeDir, reflectRay), 0.0f),32);
+	vec4 specularColor = vec4(0.0f);
+	
+	
+	//if we dont get any diffusion, meaning the light is behind the object then we couldn't possibly get a specular.
+	if ( diffusionFactor > 0.0f ) { 
+		specularColor = vec4(directionalLight.color, 1.0f) * material.specularIntensity * spec * material.shininess;
+	}
+	
+	
+	//output
+	color = texture(sampler, texCoord) * (ambientColor + diffuseColor + specularColor);		
+	
+	
 }
