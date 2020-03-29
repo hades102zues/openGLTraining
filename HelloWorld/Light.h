@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 
 
-class Light {
+class Light { //a more appropriate name for this would have been lighting system.
 
 private:
 
