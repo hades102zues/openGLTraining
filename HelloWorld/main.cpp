@@ -145,7 +145,7 @@ int main(void) {
 		);
 
 	Light* mainLight = new Light(1.0f, 1.0f, 1.0f, 0.1005f,
-													56.0f, 10.0f,7.0f,1.0f);
+													-1000000.0f, -1000000.0f,-7000000.0f,1.0f);
 
 	//Textures
 	Texture* brickTexture = new Texture("./Textures/brick.png");
@@ -171,7 +171,7 @@ int main(void) {
 	 float toRadians = 3.14159265f  / 180.0f ;
 	 float currentAngle = 0.0f;
 
-	 float maxOffset = 0.7f, triOffset = 0.0f, triIncrement = 0.0005f;
+	 float maxOffset = 0.7f, triOffset = 0.0f, triIncrement = 0.005f;
 	 bool direction = true;
 
 	
@@ -209,7 +209,7 @@ int main(void) {
 		if (abs(triOffset) >= maxOffset)
 			direction = !direction;
 
-		currentAngle += .01f;
+		currentAngle += .1f;
 
 		if (currentAngle > 360)
 			currentAngle -= 360.0f;
@@ -231,7 +231,7 @@ int main(void) {
 		mainLight->useLight(uniformAmbientIntensity, uniformAmbientColor, uniformDiffusionIntensity, uniformLightDirection);
 		
 		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
-		model = glm::translate( model, glm::vec3(0.0f, 0.0f, -4.0f));
+		model = glm::translate( model, glm::vec3(1.0f, -0.5f, -5.0f));
 		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
