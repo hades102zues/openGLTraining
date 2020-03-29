@@ -6,7 +6,7 @@ Light::Light() {
 	colour = glm::vec3(1.0f, 1.0f, 1.0f); 
 	ambientIntensity = 1.0f;
 
-	direction = glm::vec3(0.0f, -1.0f, 0.0f);
+	direction = glm::vec3(5000.0f, 2.0f, 40000.0f);
 	diffusionIntensity = 0.0f;
 
 }

@@ -23,7 +23,7 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "Light.h"
-
+#include "Material.h"
 
 
 static const char* fShaderStruct = "../ShaderStructs/shader.fragment.txt";
@@ -98,9 +98,9 @@ void createObjects(std::vector<Mesh*> &list) {
 
 	GLfloat vertices[]= {
 		//*** x,       y,       z,       u,       v				nx				ny				nz
-			-1.0f , -1.0f,  0.0f,    0.0f,     0.0f,			0.0f,			0.0f,        0.0f,			//index 0
+			-1.0f , -1.0f,  -0.6f,    0.0f,     0.0f,			0.0f,			0.0f,        0.0f,			//index 0
 			0.0f, -1.0f,   1.0f,    0.5f,	    0.0f,			0.0f,			0.0f,        0.0f,			// index 1
-		    1.0f, -1.0f,   0.0f ,   1.0f,      0.0f,			0.0f,			0.0f,        0.0f,			// index 2
+		    1.0f, -1.0f,   -0.6f ,   1.0f,      0.0f,			0.0f,			0.0f,        0.0f,			// index 2
 		    0.0f, 1.0f,    0.0f,    0.5f,      1.0f,			0.0f,			0.0f,        0.0f			//index 3
 		   
 
@@ -128,7 +128,7 @@ void createShaders(std::vector<Shader*> &list) {
 
 int main(void) {
 
-	Wind* programWindow = new Wind(800, 600); 
+	Wind* programWindow = new Wind(1366, 768); 
 	programWindow->initialIze();
 	
 	std::vector<Mesh*> meshList; //idea here is that you have an array that keeps track of all the objects you will create
@@ -136,7 +136,7 @@ int main(void) {
 
 	Camera* camera = new 
 		Camera(
-			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 2.0f, 0.0f),
 			glm::vec3(0.0f, 1.0f, 0.0f),
 			-90.0f,
 			0.0f,
@@ -145,7 +145,7 @@ int main(void) {
 		);
 
 	Light* mainLight = new Light(1.0f, 1.0f, 1.0f, 0.1005f,
-													-1000000.0f, -1000000.0f,-7000000.0f,1.0f);
+													10.0f, 4.0f,2.0f,0.101f);
 
 	//Textures
 	Texture* brickTexture = new Texture("./Textures/brick.png");
@@ -154,15 +154,24 @@ int main(void) {
 	brickTexture->loadTexture();
 	dirtTexture->loadTexture();
 
+	//Material
+	Material* shinnyMaterial = new Material(1.5f, 32.0f);
+
+
 	//shader variables 
 	GLuint 
 		uniformModel=0, 
 		uniformProjection=0, 
 		uniformView = 0,
+		uniformEyePos = 0,
+
 		uniformAmbientColor =0,
 		uniformAmbientIntensity = 0,
 		uniformLightDirection = 0,
-		uniformDiffusionIntensity = 0;
+		uniformDiffusionIntensity = 0,
+		
+		uniformMaterialSpecIntensity = 0,
+		uniformMaterialShine;
 
 	GLfloat deltaTime = 0.0f;
 	GLfloat lastTime = 0.0;
@@ -221,25 +230,32 @@ int main(void) {
 		uniformModel = shaderList[0]->getModelLocation();
 		uniformProjection = shaderList[0]->getProjectionLocation();
 		uniformView = shaderList[0]->getViewLocation();
+		uniformEyePos = shaderList[0]->getCameraPosLocation();
 
 		uniformAmbientColor = shaderList[0]->getAmbientColor();
 		uniformAmbientIntensity = shaderList[0]->getAmbientIntensity();
 		uniformLightDirection = shaderList[0]->getLightDirectionLocation();
 		uniformDiffusionIntensity = shaderList[0]->getDiffusionIntensityLocation();
 
+		uniformMaterialSpecIntensity = shaderList[0]->getMaterialSpecIntLocation();
+		uniformMaterialShine = shaderList[0]->getMaterialShineLocation();
+
 
 		mainLight->useLight(uniformAmbientIntensity, uniformAmbientColor, uniformDiffusionIntensity, uniformLightDirection);
+
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(matprojection));
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->calculateViewMatrix()));
+		glUniform3f(uniformEyePos, camera->getCameraPosition().x, camera->getCameraPosition().y, camera->getCameraPosition().z);
 		
 		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
 		model = glm::translate( model, glm::vec3(1.0f, -0.5f, -5.0f));
 		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(matprojection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera->calculateViewMatrix()));
-	   
-
+		
+	  
 		brickTexture->useTexture();
+		shinnyMaterial->useMaterial(uniformMaterialSpecIntensity, uniformMaterialShine);
 		meshList[0]->renderMesh();
 		
 

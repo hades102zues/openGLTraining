@@ -9,7 +9,8 @@ layout (location = 2) in vec3 norm;
 out vec4 vColor;
 out vec2 texCoord; 
 out vec3 Normal;
-out vec3 FragPos;																			
+out vec3 FragPos;
+out vec3 CameraPos;																				
 																									
 											
 uniform mat4 model	;																	
@@ -23,5 +24,6 @@ void main() {
      texCoord = tex;	
 
 	 Normal = mat3(transpose(inverse(model))) * norm; //normal converted to world space hence relative to the object.
-	 FragPos = vec3(model* vec4(pos, 1.0)); // vertex in world space.
+	 FragPos = (model* vec4(pos, 1.0)).xyz; // vertex in world space.
+	 CameraPos = (inverse(view)  * vec4(0.0,0.0,0.0,1.0)).xyz; //doing this calculation in the camera class now. cause less costly (:
 }
