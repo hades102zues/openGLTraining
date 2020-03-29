@@ -82,3 +82,7 @@ glm::mat4 Camera::calculateViewMatrix() {
 
 	 
 }
+
+glm::vec3 Camera::getCameraPosition() {
+	return position;
+}
