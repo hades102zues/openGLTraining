@@ -44,11 +44,16 @@ void calcAverageNormal(unsigned int* indices, unsigned int indicesCount, GLfloat
 
 
 		//next we produce a vector that would connect each pair of vertices
+		//we make in0 the arbitrary origin of the surface
 		glm::vec3 v1(vertices[in1] - vertices[in0], vertices[in1+1] - vertices[in0+1], vertices[in1+2] -vertices[in0+2]);
-		glm::vec3 v2(vertices[in2] - vertices[in1], vertices[in2+1] - vertices[in1 + 1], vertices[in2+2] - vertices[in1 + 2]);
+		glm::vec3 v2(vertices[in2] - vertices[in0], vertices[in2+1] - vertices[in0 + 1], vertices[in2+2] - vertices[in0 + 2]);
 
-		//hence v1 ' v2 will form a plane which we can then find a normal from
-		glm::vec3 normal = glm::normalize( glm::cross(v1,v2) );
+		//hence v2, v1 will form a plane which we can then find a normal from.
+		//using the right hand twist rule, which is founded upon the positive y-axis going upwards
+		//and the positive x-axis going to the right,
+		//curve our hand in such a fashion that the thumb  points in the positive z direction(because we want the light to point out of the shape and not into it).
+		//the vector at the tip of the fingers shall become the second item in the cross-product
+		glm::vec3 normal = glm::normalize( glm::cross(v2,v1) );
 
 
 		//now update the normals coordinates of each vertex we used above. Take note 
@@ -136,7 +141,7 @@ int main(void) {
 
 	Camera* camera = new 
 		Camera(
-			glm::vec3(0.0f, 2.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f),
 			glm::vec3(0.0f, 1.0f, 0.0f),
 			-90.0f,
 			0.0f,
@@ -145,7 +150,7 @@ int main(void) {
 		);
 
 	Light* mainLight = new Light(1.0f, 1.0f, 1.0f, 0.1005f,
-													10.0f, 4.0f,2.0f,0.101f);
+													7.0f,1.0f,0.0f,0.101f);
 
 	//Textures
 	Texture* brickTexture = new Texture("./Textures/brick.png");
@@ -248,8 +253,8 @@ int main(void) {
 		glUniform3f(uniformEyePos, camera->getCameraPosition().x, camera->getCameraPosition().y, camera->getCameraPosition().z);
 		
 		glm::mat4 model = glm::mat4(1.0); //a fresh identity matrix.
-		model = glm::translate( model, glm::vec3(1.0f, -0.5f, -5.0f));
-		model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate( model, glm::vec3(0.0f, -1.0f, -5.0f));
+		//model = glm::rotate(model, currentAngle *toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		

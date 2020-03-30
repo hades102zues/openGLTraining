@@ -5,7 +5,7 @@ in vec4  vColor;
 in vec2 texCoord;	
 in vec3 Normal;	
 in vec3 FragPos;	
-in vec3 CameraPos;															
+														
 
 out vec4 color;		
 
@@ -29,7 +29,7 @@ struct Material {
 uniform DirectionalLight directionalLight;	
 uniform Material material;
 uniform sampler2D sampler;
-uniform vec3 cameraPos; // Been Cook had use using the damn model space camera. This IS NOT CORRECT
+uniform vec3 cameraPos; 
 																
 																									
 void main () {			
@@ -51,7 +51,7 @@ void main () {
 	vec3 diffuseColor =  (diffusionFactor *directionalLight.color);
 	
 	//specular
-	vec3 reflectRay = normalize(reflect(-lightDir, norm));
+	vec3 reflectRay = reflect(-lightDir, norm);
 	float spec = pow(max(dot( reflectRay,eyeDir), 0.0),32);
 	vec3 specularColor = vec3(0.0);
 	
