@@ -51,7 +51,7 @@ void calcAverageNormal(unsigned int* indices, unsigned int indicesCount, GLfloat
 		//hence v2, v1 will form a plane which we can then find a normal from.
 		//using the right hand twist rule, which is founded upon the positive y-axis going upwards
 		//and the positive x-axis going to the right,
-		//curve our hand in such a fashion that the thumb  points in the positive z direction(because we want the light to point out of the shape and not into it).
+		//curve our hand in such a fashion that the thumb  points in the positive z direction (because we want the light to point out of the shape and not into it).
 		//the vector at the tip of the fingers shall become the second item in the cross-product
 		glm::vec3 normal = glm::normalize( glm::cross(v2,v1) );
 

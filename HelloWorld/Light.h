@@ -14,7 +14,7 @@ private:
 	glm::vec3 colour;
 	GLfloat ambientIntensity; //a scalar amount as well
 
-	glm::vec3 direction;  //i treat this as light position
+	glm::vec3 direction; 
 	GLfloat diffusionIntensity;
 
 

@@ -36,7 +36,7 @@ void main () {
 	
 	
 	
-	vec3 lightDir = normalize(directionalLight.direction - FragPos ); //absolutely correct
+	vec3 lightDir = normalize(-directionalLight.direction); 
 	vec3 eyeDir = normalize( cameraPos - FragPos);	//a vector from frag position to camera
 	vec3 norm = normalize(Normal); //absolutely neccesary.
 	
