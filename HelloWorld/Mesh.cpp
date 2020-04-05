@@ -32,11 +32,14 @@ void Mesh::createMesh(GLfloat* vertices, unsigned int* indices, unsigned int num
 		how many values to skip to get to the next input submission, in btyes
 		how many item we skip to get to the first value, in btyes
 	*/
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5,  0);
-	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8,  0);
+	glEnableVertexAttribArray(0);//vertices
 
-	glVertexAttribPointer(1,2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5,  (void*) ( sizeof(vertices[0]) * 3) );
-	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1,2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8,  (void*) ( sizeof(vertices[0]) * 3) );
+	glEnableVertexAttribArray(1);//texture coordinates
+
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void*)(sizeof(vertices[0]) * 5));
+	glEnableVertexAttribArray(2);//texture coordinates
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -53,6 +56,8 @@ void Mesh::renderMesh() {
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	//THIS IS ACTUALLY THE CORRECT PLACE TO BE deactivate THE VERTEXATTRIBARRAYS
 
 }
 

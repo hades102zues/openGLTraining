@@ -3,12 +3,12 @@
 
 Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMouseSensitivity, GLfloat startMovementSpeedSensitivity) {
 	
-	position = startPosition;
-	worldUp = startUp; 
-	yaw = startYaw;
-	pitch = startPitch;
+	position = startPosition; //initial starting position of the camera
+	worldUp = startUp; // hard coded as (0.0f, 1.0f, 0.0f)
+	yaw = startYaw; //hard coded at first, update will the do a recaculation
+	pitch = startPitch; //hard coded at first, update will the do a recaculation
 
-	front = glm::vec3(0.0f, 0.0f, -1.0f);
+	front = glm::vec3(0.0f, 0.0f, -1.0f);  //hard coded at first, update will the do a recaculation
 	worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	mouseSensitivity = startMouseSensitivity;
@@ -81,4 +81,13 @@ glm::mat4 Camera::calculateViewMatrix() {
 	return glm::lookAt(position, front + position, up);
 
 	 
+}
+
+glm::vec3 Camera::getCameraPosition() {
+
+	glm::mat4 view = calculateViewMatrix();
+	glm::vec4 v4WorldSpaceCamera = glm::inverse(view) * glm::vec4(0.0, 0.0, 0.0, 1.0);
+	glm::vec3 v3WorldSpaceCamera = glm::vec3(v4WorldSpaceCamera);
+
+	return v3WorldSpaceCamera;
 }

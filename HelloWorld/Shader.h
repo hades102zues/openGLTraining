@@ -9,7 +9,21 @@
 class Shader {
 
 private:
-	GLuint shaderId, uniformModel, uniformProjection, uniformView;
+	GLuint
+		shaderId,
+
+		uniformModel,
+		uniformProjection,
+		uniformView,
+		uniformCameraPosition,
+
+		uniformAmbientIntensity,
+		uniformAmbientColor,
+		uniformDiffusionIntensity,
+		uniformLightDirection,
+
+		uniformMaterialSpecIntensity,
+		uniformMaterialShininess;
 
 	void compileShader(const char* vshaderStruct, const char* fshaderStruct);
 	void addShader(GLuint& shaderProgram, GLenum shaderType, const char* shaderStruct);
@@ -25,6 +39,18 @@ public:
 	GLuint getProjectionLocation();
 	GLuint getModelLocation();
 	GLuint getViewLocation();
+	GLuint getCameraPosLocation();
+
+	GLuint getAmbientIntensity();
+	GLuint getAmbientColor();
+	GLuint getDiffusionIntensityLocation();
+	GLuint getLightDirectionLocation();
+
+	GLuint getMaterialSpecIntLocation();
+	GLuint getMaterialShineLocation();
+
+
+	
 
 	void useShader();
 	void clearShader();

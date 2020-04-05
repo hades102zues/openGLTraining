@@ -2,13 +2,72 @@
 #version 330																				
 																									
 in vec4  vColor; 	
-in vec2 texCoord;																		
+in vec2 texCoord;	
+in vec3 Normal;	
+in vec3 FragPos;	
+														
 
+out vec4 color;		
+
+
+struct DirectionalLight {
+    vec3 color;
+    float ambientIntensity;
+	
+	vec3 direction; 
+	float diffuseIntensity;
+	
+};	
+
+struct Material {
+	
+	float specularIntensity;
+	float shininess;
+
+};
+
+uniform DirectionalLight directionalLight;	
+uniform Material material;
 uniform sampler2D sampler;
-
-out vec4 color;																				
+uniform vec3 cameraPos; 
+																
 																									
-void main () {																				
-    color = vColor;	
-    color = texture(sampler, texCoord);																		
+void main () {			
+	
+	
+	
+	vec3 lightDir = normalize(-directionalLight.direction); 
+	vec3 eyeDir = normalize( cameraPos - FragPos);	//a vector from frag position to camera
+	vec3 norm = normalize(Normal); //absolutely neccesary.
+	
+	vec3 hm = normalize(directionalLight.direction);
+	
+
+    //ambient, with light properties only
+    vec3 ambientColor =  directionalLight.ambientIntensity * directionalLight.color;	
+	
+	//diffusion, with light properties only
+    float diffusionFactor = max(dot(norm, lightDir), 0.0);	
+	vec3 diffuseColor =  (diffusionFactor *directionalLight.color);
+	
+	//specular
+	vec3 reflectRay = reflect(-lightDir, norm);
+	float spec = pow(max(dot( reflectRay,eyeDir), 0.0),32);
+	vec3 specularColor = vec3(0.0);
+	
+    if (diffusionFactor > 0.0f) { //if u wont have diffusion then how do you expect to have specular
+		specularColor =   spec * material.specularIntensity * directionalLight.color;
+	
+	}
+			
+		
+   
+		
+	
+	vec4 result = vec4((ambientColor + diffuseColor + specularColor),1.0) * texture(sampler, texCoord) ;
+	
+	//output
+	color = result;		
+	
+	
 }

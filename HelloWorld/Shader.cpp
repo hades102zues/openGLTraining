@@ -86,6 +86,15 @@ void Shader::compileShader(const char* vshaderStruct, const char* fshaderStruct)
 	uniformModel = glGetUniformLocation(shaderId, "model");
 	uniformProjection = glGetUniformLocation(shaderId, "projection");
 	uniformView = glGetUniformLocation(shaderId, "view");
+	uniformAmbientColor = glGetUniformLocation(shaderId, "directionalLight.color");
+	uniformAmbientIntensity = glGetUniformLocation(shaderId, "directionalLight.ambientIntensity");
+	uniformDiffusionIntensity = glGetUniformLocation(shaderId, "directionalLight.diffuseIntensity");
+	uniformLightDirection = glGetUniformLocation(shaderId, "directionalLight.direction");
+	uniformCameraPosition = glGetUniformLocation(shaderId, "cameraPos");
+	uniformMaterialSpecIntensity = glGetUniformLocation(shaderId, "material.specularIntensity");
+	uniformMaterialShininess = glGetUniformLocation(shaderId, "material.shininess");
+
+	
 }
 
 std::string Shader::readFile( const char* fileLocation) {
@@ -122,6 +131,34 @@ GLuint Shader::getModelLocation() {
 
 GLuint Shader::getViewLocation() {
 	return uniformView;
+}
+
+GLuint Shader::getAmbientColor() {
+	return uniformAmbientColor;
+}
+
+GLuint Shader::getAmbientIntensity() {
+	return uniformAmbientIntensity;
+}
+
+GLuint Shader::getDiffusionIntensityLocation() {
+	return uniformDiffusionIntensity;
+}
+GLuint Shader::getLightDirectionLocation() {
+
+	return uniformLightDirection;
+}
+
+GLuint Shader::getCameraPosLocation() {
+	return uniformCameraPosition;
+}
+
+GLuint Shader::getMaterialSpecIntLocation() {
+	return uniformMaterialSpecIntensity;
+}
+
+GLuint Shader::getMaterialShineLocation() {
+	return uniformMaterialShininess;
 }
 
 void Shader::useShader() {

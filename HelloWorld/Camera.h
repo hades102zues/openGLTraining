@@ -40,5 +40,7 @@ public :
 
     void  update();
     glm::mat4 calculateViewMatrix();
+    glm::vec3 getCameraPosition();
+
     ~Camera();
 };
